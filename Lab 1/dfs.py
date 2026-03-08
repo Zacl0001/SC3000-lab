@@ -13,8 +13,7 @@ with open('Dist.json', 'r') as file:
 with open('Cost.json', 'r') as file:
     cost = json.load(file)
 
-def dfs(maxenergy):
-    start, end = '1', '50'
+def dfs(maxenergy, start, end):
     totaldist = {start: 0}
     energy = {start: 0}
     parent = {}
@@ -23,7 +22,14 @@ def dfs(maxenergy):
     while len(nextqueue) != 0:
         accdist, cur = heappop(nextqueue)
         if cur == end:
-            break
+            path = []
+            node = end
+            path.append(node)
+            while node in parent:
+                node = parent[node]
+                path.append(node)
+            path.reverse()
+            return path, totaldist[end], energy[end]
         for node in G_node[cur]:
             pair = cur + "," + node
             if cost[pair] + energy[cur] > maxenergy:
@@ -31,14 +37,19 @@ def dfs(maxenergy):
             elif node not in totaldist or distpair[pair] + accdist < totaldist[node]:
                 totaldist[node] = distpair[pair] + accdist
                 energy[node] = cost[pair] + energy[cur]
-                heappush(nextqueue, (totaldist[node], node))
-
-    print(totaldist["2"])
-    print(f"Energy = {energy["50"]}")
-    return totaldist["50"]
+                parent[node] = cur
+                heappush(nextqueue, (totaldist[node], node)) 
+    return None, -1, -1    
         
 
 
 energy = 287932
-w = dfs(energy)
-print(w)
+S, T = '1', '50'
+path, min_dist, total_energy = dfs(energy, S, T)
+if path is None:
+    print("No path available")
+else:
+    print("Shortest path: ", end="")
+    print("->".join(path))
+    print(f"Shortest distance: {min_dist}")
+    print(f"Total energy cost: {total_energy}")
