@@ -103,7 +103,7 @@ def ucs(G, Dist, Cost, start, goal):
             path.append(start)
             path.reverse()
             return totaldist[goal], path
-        # Explore neighbors
+        # Explore neighbours
         for neighbour in G[current]:
             # Compute tentative distance and energy cost to the neighbour
             tentative_dist = totaldist[current] + Dist[f"{current},{neighbour}"]
@@ -112,7 +112,7 @@ def ucs(G, Dist, Cost, start, goal):
             # Skip this path if the energy budget would be exceeded
             if tentative_energy > energy_budget:
                 continue
-            # Update if this path to the neighbor is shorter than any previously found
+            # Update if this path to the neighbour is shorter than any previously found
             elif neighbour not in totaldist or tentative_dist < totaldist[neighbour]:
                 totaldist[neighbour] = tentative_dist
                 energy_score[neighbour] = tentative_energy
@@ -146,28 +146,28 @@ def astar(G, Coord, Dist, Cost, start, goal):
             path.reverse()
             return g_score[goal], path
 
-        # Explore neighbors
-        for neighbor in G[current]:
+        # Explore neighbour
+        for neighbour in G[current]:
 
-            # Compute tentative distance and energy cost to the neighbor
-            tentative_g = g_score[current] + Dist[f"{current},{neighbor}"]
-            tentative_energy = energy_score[current] + Cost[f"{current},{neighbor}"]
+            # Compute tentative distance and energy cost to the neighbour
+            tentative_g = g_score[current] + Dist[f"{current},{neighbour}"]
+            tentative_energy = energy_score[current] + Cost[f"{current},{neighbour}"]
 
             # Skip this path if the energy budget would be exceeded
             if tentative_energy > energy_budget:
                 continue
 
-            # Update if this path to the neighbor is shorter than any previously found
-            if neighbor not in g_score or tentative_g < g_score[neighbor]:
-                g_score[neighbor] = tentative_g
-                energy_score[neighbor] = tentative_energy
-                parent[neighbor] = current
+            # Update if this path to the neighbour is shorter than any previously found
+            if neighbour not in g_score or tentative_g < g_score[neighbour]:
+                g_score[neighbour] = tentative_g
+                energy_score[neighbour] = tentative_energy
+                parent[neighbour] = current
 
                 # Compute A* priority: f(n) = g(n) + h(n)
                 # where g(n) is the distance so far and h(n) is the heuristic estimate to the goal
-                f_score = tentative_g + heuristic(neighbor, goal, Coord)
+                f_score = tentative_g + heuristic(neighbour, goal, Coord)
 
-                heapq.heappush(open_set, (f_score, neighbor))
+                heapq.heappush(open_set, (f_score, neighbour))
 
     # Return None if no valid path satisfies the energy constraint
     return inf, None
