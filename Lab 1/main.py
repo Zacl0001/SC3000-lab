@@ -70,12 +70,13 @@ def dijkstra_shortest_path(graph: dict, dist, start, goal):
     return distances[goal], path
 
 
-# Define heuristic
-# Computes Euclidean distance between node and goal
-# Straight line distance represents minimum possible distance between 2 points
-# Good heuristic as prioritises nodes closer to goal
-
 def heuristic(v, goal, Coord):
+    # Define heuristic
+    '''
+    Computes Euclidean distance between node and goal.
+    Straight line distance represents minimum possible distance between 2 points.
+    '''
+    # Good heuristic as prioritises nodes closer to goal
     x1, y1 = Coord[str(v)]
     x2, y2 = Coord[str(goal)]
     return sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
