@@ -14,6 +14,18 @@ def edge_distance(dist, u, v):
     return dist[key]
 
 
+def edge_energy_cost(cost, u, v):
+    key = f"{u},{v}"
+    return cost[key]
+
+
+def path_energy_cost(path, cost):
+    total = 0
+    for i in range(len(path) - 1):
+        total += edge_energy_cost(cost, path[i], path[i + 1])
+    return total
+
+
 def dijkstra_shortest_path(graph: dict, dist, start, goal):
     start = str(start)
     goal = str(goal)
@@ -64,6 +76,7 @@ def dijkstra_shortest_path(graph: dict, dist, start, goal):
 def main():
     graph = load_json(Path("G.json"))
     dist = load_json(Path("Dist.json"))
+    cost = load_json(Path("Cost.json"))
 
     start = input("Enter start node: ").strip()
     goal = input("Enter goal node: ").strip()
@@ -75,6 +88,7 @@ def main():
         return
 
     print(f"Shortest distance: {total_distance}")
+    print(f"Total energy cost: {path_energy_cost(path, cost)}")
     print("Path:", " -> ".join(path))
 
 

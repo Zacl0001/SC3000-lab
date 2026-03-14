@@ -180,11 +180,6 @@ def initialise_policy(pi, my_seed):
 
     input("Proceed? ")
 
-    
-
-
-
-
 def main():
     # configuration: ask for user input on no. of episodes and seed 
     no_of_episodes = int(input("Enter the number of episodes: "))
@@ -214,13 +209,5 @@ def main():
         print_policy(pi)
         print("\n\n")
     
-
-
-
-
-
-
-
-
 if __name__ == "__main__": 
     main()
