@@ -1,5 +1,4 @@
 import random
-import statistics
 
 # seed can be changed to alter the initial arbitrary policy, and also the behaviour of epsilon-greedy
 
@@ -32,7 +31,7 @@ def get_action(x, y, pi):
         elif 0.950 <= prob_float < 0.975: return "U"
         else: return "D" 
 
-def get_next_state(x, y, action: str, stochastic: bool): 
+def get_next_state(x, y, action: str): 
     '''
     input the coordinates of the current state and the action to take  
     input whether stochastic transition is involved for getting the next state
@@ -78,19 +77,19 @@ def get_next_state(x, y, action: str, stochastic: bool):
 
     prob_float = random.random()
     if action == "U": 
-        if stochastic == False or 0 <= prob_float < 0.8: return move_up(x, y)
+        if 0 <= prob_float < 0.8: return move_up(x, y)
         elif 0.8 <= prob_float < 0.9: return move_left(x, y)
         else: return move_right(x, y)
     elif action == "D": 
-        if stochastic == False or 0 <= prob_float < 0.8: return move_down(x, y)
+        if 0 <= prob_float < 0.8: return move_down(x, y)
         elif 0.8 <= prob_float < 0.9: return move_left(x, y)
         else: return move_right(x, y)
     elif action == "L": 
-        if stochastic == False or 0 <= prob_float < 0.8: return move_left(x, y)
+        if 0 <= prob_float < 0.8: return move_left(x, y)
         elif 0.8 <= prob_float < 0.9: return move_up(x, y)
         else: return move_down(x, y)
     else: 
-        if stochastic == False or 0 <= prob_float < 0.8: return move_right(x, y)
+        if 0 <= prob_float < 0.8: return move_right(x, y)
         elif 0.8 <= prob_float < 0.9: return move_up(x, y)
         else: return move_down(x, y)
 
@@ -113,7 +112,7 @@ def generate_episode(pi, reward_table):
 
     while x != 4 or y != 4: 
         action = get_action(x, y, pi)
-        x,y = get_next_state(x, y, action, True)
+        x,y = get_next_state(x, y, action)
         reward = reward_table[x][y]
         episode.extend([action, reward, (x,y)])
 
@@ -124,7 +123,7 @@ def generate_episode(pi, reward_table):
 #   S0    A0   R1    S1   A1   R2   S2    A2   R3    S3   A3   R4   S4
 # len(episode) = 3n+1 = n(state, action, next_reward) + final_state = 13
 
-def calculate_rewards(episode, sample_returns, q_table): 
+def calculate_rewards(episode, q_table): 
     length = len(episode)
     final_index = length-2 # initialise final_index to be the final reward
     i = 2
@@ -135,7 +134,7 @@ def calculate_rewards(episode, sample_returns, q_table):
         action = episode[i-1]
         reward = episode[i]   
         # alpha = 0.1
-        x_next,y_next = get_next_state(x, y, action, False)
+        x_next,y_next = episode[i+1]
         qmax = max(q_table[x_next][y_next]["U"], q_table[x_next][y_next]["D"], q_table[x_next][y_next]["L"], q_table[x_next][y_next]["R"])
         q_table[x][y][action] = q_table[x][y][action] + 0.1 * (reward + GAMMA * qmax - q_table[x][y][action])
         i += 3
@@ -183,9 +182,8 @@ def main():
     random.seed(my_seed)
 
     # initialisation
-    # for q_table, sample_returns, pi, disregard (2,1), (2,3), (4,4)
+    # for q_table, pi, disregard (2,1), (2,3), (4,4)
     q_table = [[{"U":0, "D":0, "L":0, "R":0} for _ in range(5)] for _ in range(5)]
-    sample_returns = [[{"U":[], "D":[], "L":[], "R":[]} for _ in range(5)] for _ in range(5)]
     pi = [[None for _ in range(5)] for _ in range(5)]
     reward_table = ((-1, -1, -1, -1, -1), (-1, -1, -1, -1, -1), (-1, None, -1, None, -1), (-1, -1, -1, -1, -1), (-1, -1, -1, -1, 9))
 
@@ -196,7 +194,7 @@ def main():
         # generate an episode using pi
         episode = generate_episode(pi, reward_table)
         # calculate mean rewards for each state-action pair in the episode 
-        calculate_rewards(episode, sample_returns, q_table)
+        calculate_rewards(episode, q_table)
         # update policy
         update_policy(pi, q_table)
 
