@@ -124,7 +124,7 @@ def generate_episode(pi, reward_table):
 #   S0    A0   R1    S1   A1   R2   S2    A2   R3    S3   A3   R4   S4
 # len(episode) = 3n+1 = n(state, action, next_reward) + final_state = 13
 
-def calculate_rewards(episode, sample_returns, q_table): 
+def calculate_rewards(episode, q_table): 
     length = len(episode)
     final_index = length-2 # initialise final_index to be the final reward
     i = 2
@@ -133,9 +133,9 @@ def calculate_rewards(episode, sample_returns, q_table):
         # We use the coordinates, rewards and actions for each state for the new q value calculation
         x,y = episode[i-2]
         action = episode[i-1]
-        reward = episode[i]   
+        reward = episode[i]
+        x_next,y_next = episode[i+1]
         # alpha = 0.1
-        x_next,y_next = get_next_state(x, y, action, False)
         qmax = max(q_table[x_next][y_next]["U"], q_table[x_next][y_next]["D"], q_table[x_next][y_next]["L"], q_table[x_next][y_next]["R"])
         q_table[x][y][action] = q_table[x][y][action] + 0.1 * (reward + GAMMA * qmax - q_table[x][y][action])
         i += 3
