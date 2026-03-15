@@ -201,7 +201,9 @@ def main():
         update_policy(pi, q_table)
 
         # print results
+        print(f"Q table after {num+1} episodes:")
         print_q_table(q_table)
+        print()
         print(f"Policy after {num+1} episodes (seed = {my_seed}): ")
         print_policy(pi)
         print("\n\n")
