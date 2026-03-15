@@ -1,4 +1,3 @@
-# We shift all our work into here later
 # PART 1 (part 2 not added yet)
 import json
 import heapq
@@ -208,12 +207,13 @@ def main():
     with open("Cost.json", "r") as file:
         Cost = json.load(file)
 
+    print("-----PART 1-----")
     start = input("Enter start node: ").strip()
     goal = input("Enter goal node: ").strip()
     runs = int(input("Enter number of runs (for runtime calc): ").strip())
 
     # task 1: no energy constraint
-    print("-----TASK 1-----")
+    print("\n-----TASK 1-----")
 
     total_distance, path, nodes = dijkstra_shortest_path(G, Dist, start, goal)
     avg_runtime = runtime(dijkstra_shortest_path, runs, G, Dist, start, goal)
@@ -226,10 +226,9 @@ def main():
         print(f"Total energy cost: {path_energy_cost(path, Cost)}")
         print(f"Nodes expanded: {nodes}")
         print(f"Average runtime over {runs} runs: {avg_runtime:.6f} seconds")
-    print()
 
     #task 2: Uninformed search algorithm
-    print("-----TASK 2-----")
+    print("\n-----TASK 2-----")
     total_distance, path, nodes = ucs(G, Dist, Cost, start, goal)
     avg_runtime = runtime(ucs, runs, G, Dist, Cost, start, goal)
 
@@ -241,10 +240,9 @@ def main():
         print(f"Total energy cost: {path_energy_cost(path, Cost)}")
         print(f"Nodes expanded: {nodes}")
         print(f"average runtime over {runs} runs: {avg_runtime:.6f} seconds")
-    print()
 
     #task 3: A* Search algorithm
-    print("-----TASK 3-----")
+    print("\n-----TASK 3-----")
     total_distance, path, nodes = astar(G, Coord, Dist, Cost, start, goal)
     avg_runtime = runtime(astar, runs, G, Coord, Dist, Cost, start, goal)
 
