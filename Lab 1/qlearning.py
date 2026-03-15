@@ -34,8 +34,9 @@ def get_action(x, y, pi):
 
 def get_next_state(x, y, action: str, stochastic: bool): 
     '''
-    input the coordinates of the current state, and the action to take  
-    output the coordinates of the next state  
+    input the coordinates of the current state and the action to take  
+    input whether stochastic transition is involved for getting the next state
+    output the coordinates of the next state
     (note that stochastic transition causes the intended action to execute not as planned)
     '''
     def reach_roadblock(x, y): # x is row, y is col
