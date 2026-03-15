@@ -1,4 +1,3 @@
-# PART 1 (part 2 not added yet)
 import json
 import heapq
 from math import inf, sqrt
